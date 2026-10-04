@@ -1,0 +1,21 @@
+{
+  "name": "natalia-kovtalo-lab3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Natalia-Kovtalo17/Natalia-Kovtalo-lab3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Natalia-Kovtalo17/Natalia-Kovtalo-lab3/issues"
+  },
+  "homepage": "https://github.com/Natalia-Kovtalo17/Natalia-Kovtalo-lab3#readme"
+}
