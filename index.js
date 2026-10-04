@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const program = new Command();
 
-// Безпечна функція читання та валідації JSON-файлу з обробкою помилок українською
+// Безпечна функція читання та валідації JSON-файлу
 function readData(filePath) {
   try {
     if (!fs.existsSync(filePath)) {
@@ -31,7 +31,6 @@ program
 // ЧАСТИНА 3: Загальні можливості
 // ==========================================
 
-// 1. Перелік маршрутів з можливістю обмеження кількості
 program
   .command('list')
   .description('Показати стислий список транспортних маршрутів')
@@ -50,7 +49,7 @@ program
       console.log((index + 1) + '. Маршрут №' + route.routeNumber + ' (' + route.transportType + ') — зупинок: ' + route.stops.length);
     });
   });
-// 2. Один елемент (повна інформація про маршрут за номером)
+
 program
   .command('item')
   .description('Показати повну інформацію про конкретний маршрут')
@@ -70,7 +69,6 @@ program
     console.log('Детальна інформація про маршрут:', JSON.stringify(found, null, 2));
   });
 
-// 3. Окреме поле (доступ до вкладених об'єктів, наприклад intervals.weekdaysMinutes)
 program
   .command('field')
   .description('Показати значення окремого вкладеного поля маршруту')
@@ -101,6 +99,93 @@ program
       console.log('Значення поля ' + path + ': null (примітки відсутні)');
     } else {
       console.log('Значення поля ' + path + ':', current);
+    }
+  });
+
+
+// ==========================================
+// ЧАСТИНА 4: Можливості свого варіанта (Варіант 9)
+// ==========================================
+
+// 1. Зупинки маршруту (використовує name, latitude, longitude)
+program
+  .command('stops')
+  .description('Показати список зупинок для конкретного маршруту')
+  .argument('', 'номер маршруту (наприклад, 3A)')
+  .action((routeNumber) => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+    const routes = data.routes || [];
+
+    const route = routes.find(r => String(r.routeNumber).toLowerCase() === routeNumber.toLowerCase());
+    if (!route) {
+      console.error('Помилка: Маршрут №"' + routeNumber + '" не знайдено.');
+      process.exit(2);
+    }
+
+    console.log('Зупинки для маршруту №' + route.routeNumber + ' (' + route.transportType + '):');
+    route.stops.forEach((stop, index) => {
+      if (typeof stop === 'string') {
+        console.log((index + 1) + '. ' + stop);
+      } else {
+        const name = stop.name;
+        const lat = stop.latitude;
+        const lng = stop.longitude;
+        
+        const coordStr = (lat !== undefined && lng !== undefined) ? ' [Координати: ' + lat + ', ' + lng + ']' : '';
+        console.log((index + 1) + '. ' + name + coordStr);
+      }
+    });
+  });
+
+// 2. Інтервал руху (використовує weekdaysMinutes та weekendsMinutes)
+program
+  .command('intervals')
+  .description('Показати інтервал руху маршруту')
+  .argument('', 'номер маршруту (наприклад, 3A)')
+  .argument('[day]', 'день тижня: weekdays або weekends')
+  .action((routeNumber, dayArg) => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+    const routes = data.routes || [];
+
+    const route = routes.find(r => String(r.routeNumber).toLowerCase() === routeNumber.toLowerCase());
+    if (!route) {
+      console.error('Помилка: Маршрут №"' + routeNumber + '" не знайдено.');
+      process.exit(2);
+    }
+
+    const intervals = route.intervals || {};
+    console.log('Інтервали руху для маршруту №' + route.routeNumber + ':');
+
+    const day = dayArg ? dayArg.toLowerCase() : 'all';
+
+    if (day === 'weekdays' || day === 'all') {
+      console.log('- Будні дні: ' + (intervals.weekdaysMinutes !== undefined ? intervals.weekdaysMinutes + ' хв' : 'не вказано'));
+    }
+    if (day === 'weekends' || day === 'weekend' || day === 'all') {
+      console.log('- Вихідні дні: ' + (intervals.weekendsMinutes !== undefined ? intervals.weekendsMinutes + ' хв' : 'не вказано'));
+    }
+  });
+
+// 3. Маршрути з низькою підлогою
+program
+  .command('low-floor')
+  .description('Показати маршрути, які мають низькопідлогові машини')
+  .action(() => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+    const routes = data.routes || [];
+
+    const lowFloorRoutes = routes.filter(r => r.hasLowFloorVehicles === true);
+
+    console.log('Маршрути з низькопідлоговими машинами у місті ' + data.cityName + ':');
+    if (lowFloorRoutes.length === 0) {
+      console.log('Послуга низької підлоги на жодному маршруті не заявлена.');
+    } else {
+      lowFloorRoutes.forEach((route, index) => {
+        console.log((index + 1) + '. Маршрут №' + route.routeNumber + ' (' + route.transportType + ') — зупинок: ' + route.stops.length);
+      });
     }
   });
 
