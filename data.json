@@ -1,0 +1,59 @@
+{
+  "cityName": "Львів",
+  "routes": [
+    {
+      "routeNumber": "3A",
+      "transportType": "bus",
+      "hasLowFloorVehicles": true,
+      "remarks": null,
+      "intervals": {
+        "weekdaysMinutes": 8,
+        "weekendsMinutes": 15
+      },
+      "stops": [
+        {
+          "name": "ТЦ «Форум Львів»",
+          "latitude": 49.8501,
+          "longitude": 24.0234
+        },
+        {
+          "name": "пл. Різні",
+          "latitude": 49.8442,
+          "longitude": 24.0285
+        },
+        {
+          "name": "ТРЦ «Кінг Крос Леополіс»",
+          "latitude": 49.7745,
+          "longitude": 24.0121
+        }
+      ]
+    },
+    {
+      "routeNumber": "2",
+      "transportType": "tram",
+      "hasLowFloorVehicles": false,
+      "remarks": "Ремонт колій на вул. Личаківській",
+      "intervals": {
+        "weekdaysMinutes": 10,
+        "weekendsMinutes": 20
+      },
+      "stops": [
+        {
+          "name": "вул. Коновальця",
+          "latitude": 49.8291,
+          "longitude": 23.9984
+        },
+        {
+          "name": "Університет",
+          "latitude": 49.8402,
+          "longitude": 24.0222
+        },
+        {
+          "name": "вул. Пасічна",
+          "latitude": 49.8356,
+          "longitude": 24.0712
+        }
+      ]
+    }
+  ]
+}
