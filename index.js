@@ -53,7 +53,7 @@ program
 program
   .command('item')
   .description('Показати повну інформацію про конкретний маршрут')
-  .argument('', 'номер маршруту (наприклад, 3A)')
+  .argument('<routeNumber>', 'номер маршруту (наприклад, 3A)')
   .action((routeNumber) => {
     const opts = program.opts();
     const data = readData(opts.file);
@@ -72,8 +72,8 @@ program
 program
   .command('field')
   .description('Показати значення окремого вкладеного поля маршруту')
-  .argument('', 'номер маршруту')
-  .argument('', 'шлях до поля (наприклад, intervals.weekdaysMinutes або remarks)')
+  .argument('<routeNumber>', 'номер маршруту')
+  .argument('<path>', 'шлях до поля (наприклад, intervals.weekdaysMinutes або remarks)')
   .action((routeNumber, path) => {
     const opts = program.opts();
     const data = readData(opts.file);
@@ -111,7 +111,7 @@ program
 program
   .command('stops')
   .description('Показати список зупинок для конкретного маршруту')
-  .argument('', 'номер маршруту (наприклад, 3A)')
+  .argument('<routeNumber>', 'номер маршруту (наприклад, 3A)')
   .action((routeNumber) => {
     const opts = program.opts();
     const data = readData(opts.file);
@@ -142,7 +142,7 @@ program
 program
   .command('intervals')
   .description('Показати інтервал руху маршруту')
-  .argument('', 'номер маршруту (наприклад, 3A)')
+  .argument('<routeNumber>', 'номер маршруту (наприклад, 3A)')
   .argument('[day]', 'день тижня: weekdays або weekends')
   .action((routeNumber, dayArg) => {
     const opts = program.opts();
